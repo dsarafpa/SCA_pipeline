@@ -19,6 +19,7 @@ jobs:
             node -v
             python3 --version
             pip3 --version
+
       - run:
           name: Download cortexcli
           command: |
@@ -48,4 +49,4 @@ workflows:
   cortex-scan-workflow:
     jobs:
       - cortex-code-scan
-          context: cortex-secrets
+            context: cortex-secrets
