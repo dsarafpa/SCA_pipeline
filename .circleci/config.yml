@@ -7,26 +7,28 @@ jobs:
     environment:
       CORTEX_API_URL: https://api-platform-pre-deployment-x5.xdr.pr.paloaltonetworks.com
     steps:
-      - checkout
+       - checkout
+       
+      - run:
+          name: Install Python 3 and pip
+          command: |
+            sudo apt update
+            sudo apt install -y python3 python3-pip python3-venv
+
+      - run:
+          name: Check versions
+          command: |
+            node -v
+            python3 --version
+            pip3 --version
 
       - run:
           name: Download cortexcli
           command: |
             set -x
-            crtx_resp=$(curl -v "${CORTEX_API_URL}/public_api/v1/unified-cli/releases/download-link?os=linux&architecture=amd64" \
+            crtx_resp=$(curl "${CORTEX_API_URL}/public_api/v1/unified-cli/releases/download-link?os=linux&architecture=amd64" \
               -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" \
               -H "Authorization: ${CORTEX_API_KEY}")
-
-            if [ -z "$crtx_resp" ]; then
-                echo "Error: No response from API"
-                exit 1
-            fi
-
-            crtx_url=$(echo "$crtx_resp" | jq -r .signed_url)
-            if [ -z "$crtx_url" ]; then
-                echo "Error: signed_url not found in the response"
-                exit 1
-            fi
 
             curl -o cortexcli "$crtx_url"
             chmod +x cortexcli
