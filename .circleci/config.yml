@@ -48,5 +48,5 @@ jobs:
 workflows:
   cortex-scan-workflow:
     jobs:
-      - cortex-code-scan
-    context: cortex-secrets
+      - cortex-code-scan:
+          context: cortex-secrets 
