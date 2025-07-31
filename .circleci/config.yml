@@ -45,8 +45,10 @@ jobs:
               --branch "${CIRCLE_BRANCH}" \
               --source "CIRCLE_CI" \
               --create-repo-if-missing
+
 workflows:
   cortex-scan-workflow:
     jobs:
-      - cortex-code-scan
-         context: cortex-secrets
+      - cortex-code-scan:
+          context: cortex-secrets
+
