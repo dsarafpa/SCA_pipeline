@@ -16,6 +16,19 @@ jobs:
             crtx_resp=$(curl "${CORTEX_API_URL}/public_api/v1/unified-cli/releases/download-link?os=linux&architecture=amd64" \
               -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" \
               -H "Authorization: ${CORTEX_API_KEY}")
+              crtx_resp=$(curl -s 'https://api-platform-pre-deployment-x5.xdr.pr.paloaltonetworks.com/public_api/v1/unified-cli/releases/download-link?os=linux&architecture=amd64' -H 'x-xdr-auth-id: your_auth_id' -H 'Authorization: Bearer your_token')
+              if [ -z "$crtx_resp" ]; then
+                  echo "Error: No response from API"
+                  exit 1
+              fi
+              
+              crtx_url=$(echo "$crtx_resp" | jq -r .signed_url)
+              if [ -z "$crtx_url" ]; then
+                  echo "Error: signed_url not found in the response"
+                  exit 1
+              fi
+              
+              curl -o cortexcli "$crtx_url"
             crtx_url=$(echo $crtx_resp | jq -r ".signed_url")
             curl -o cortexcli $crtx_url
             chmod +x cortexcli
